@@ -9,6 +9,7 @@ const TasksTable = ({
     tasks,
     queryParams = null,
     hideProjectColumn = false,
+    success,
 }) => {
     queryParams = queryParams || {};
     //searchFieldChanged function
@@ -39,8 +40,24 @@ const TasksTable = ({
         }
         router.get(route("task.index"), queryParams);
     };
+
+    const deleteTaskHandler = (task, id) => {
+        if (!window.confirm("Are you sure you want to delete this task?")) {
+            return;
+        }
+        router.delete(route("task.destroy", id));
+    };
+
     return (
         <>
+            <div>
+                {success && (
+                    <div className="bg-emerald-400  text-white px-3 py-1 mb-3 rounded-md  font-semibold">
+                        {success}
+                    </div>
+                )}
+            </div>
+
             <div className="overflow-auto">
                 <table className="w-full text-sm text-left rtl:text-right text-grey-500">
                     <thead className="text-xs text-gray-700 uppercase bg-gray-50 border-b-2  border-grey-500">
@@ -155,7 +172,11 @@ const TasksTable = ({
                                         {task.project.name}
                                     </td>
                                 )}
-                                <td className="px-3 py-2">{task.name}</td>
+                                <th className="px-3 py-2 hover:underline font-light">
+                                    <Link href={route("task.show", task.id)}>
+                                        {task.name}
+                                    </Link>
+                                </th>
                                 <td className="px-3 py-2">
                                     <span
                                         className={
@@ -175,19 +196,21 @@ const TasksTable = ({
                                 <td className="px-3 py-2">
                                     {task.createdBy.name}
                                 </td>
-                                <td className="px-3 py-2">
+                                <td className="px-3 py-2 text-nowrap">
                                     <Link
                                         href={route("task.edit", task.id)}
                                         className="font-medium text-white hover:bg-blue-400 mx-2 bg-blue-600 py-1 px-3 rounded-md"
                                     >
                                         Edit
                                     </Link>
-                                    <Link
-                                        href={route("task.destroy", task.id)}
+                                    <button
+                                        onClick={(e) =>
+                                            deleteTaskHandler(task, task.id)
+                                        }
                                         className="font-medium text-white hover:bg-red-400 mx-2 bg-red-600 py-1 px-3 rounded-md"
                                     >
                                         Delete
-                                    </Link>
+                                    </button>
                                 </td>
                             </tr>
                         ))}

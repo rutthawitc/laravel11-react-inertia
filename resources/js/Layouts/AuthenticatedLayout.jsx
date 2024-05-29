@@ -46,6 +46,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                 >
                                     Users
                                 </NavLink>
+                                <NavLink
+                                    href={route("task.mytask")}
+                                    active={route().current("task.mytask")}
+                                >
+                                    My Task
+                                </NavLink>
                             </div>
                         </div>
                         <div className="hidden sm:flex sm:items-center sm:ms-6">
@@ -165,6 +171,12 @@ export default function AuthenticatedLayout({ user, header, children }) {
                             active={route().current("user.index")}
                         >
                             User
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink
+                            href={route("task.mytask")}
+                            active={route().current("task.mytask")}
+                        >
+                            My Tasks
                         </ResponsiveNavLink>
                     </div>
 
